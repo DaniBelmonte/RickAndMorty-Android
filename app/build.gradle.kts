@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.retrofit.v230)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor.v4120)
+    implementation(libs.coil.compose)
 }

@@ -1,4 +1,4 @@
-package com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.main
+package com.rudo.rickAndMorty.presentation.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle

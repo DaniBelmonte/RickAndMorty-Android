@@ -5,6 +5,7 @@
     <!--
        Declare your application's activities here and configure theme.xml.
    -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"

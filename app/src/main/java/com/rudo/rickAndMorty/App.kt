@@ -1,4 +1,4 @@
-package com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty
+package com.rudo.rickAndMorty
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
