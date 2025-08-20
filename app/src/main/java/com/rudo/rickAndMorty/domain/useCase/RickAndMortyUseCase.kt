@@ -4,7 +4,7 @@ import com.rudo.rickAndMorty.domain.entity.Character
 import com.rudo.rickAndMorty.domain.entity.CharacterDetail
 
 interface RickAndMortyUseCase {
-    suspend fun getCharacters(id: Int?): List<Character>
+    suspend fun getCharacters(page: Int?): List<Character>
     suspend fun getCharacterById(id: Int): CharacterDetail
     suspend fun searchCharacters(query: String): List<Character>
 }

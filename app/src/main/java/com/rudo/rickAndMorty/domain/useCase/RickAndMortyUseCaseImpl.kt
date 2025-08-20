@@ -6,8 +6,8 @@ import com.rudo.rickAndMorty.domain.entity.CharacterDetail
 import jakarta.inject.Inject
 
 class RickAndMortyUseCaseImpl @Inject constructor(val repository: RickAndMortyRepository): RickAndMortyUseCase {
-    override suspend fun getCharacters(id: Int?): List<Character> {
-        return repository.getCharacters()
+    override suspend fun getCharacters(page: Int?): List<Character> {
+        return repository.getCharacters(page)
     }
 
     override suspend fun getCharacterById(id: Int): CharacterDetail {

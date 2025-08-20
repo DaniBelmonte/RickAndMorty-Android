@@ -25,6 +25,7 @@ class HomeViewModel: ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState())
     val uiState = _uiState.asStateFlow()
+    var page = 1
 
     var searchJob: Job? = null
     init {
@@ -38,6 +39,16 @@ class HomeViewModel: ViewModel() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(characters = useCase.getCharacters(1))
+            }
+        }
+    }
+
+    fun loadMoreCharacters() {
+        viewModelScope.launch {
+            val newCharacters = useCase.getCharacters(page + 1)
+            page++
+            _uiState.update {
+                it.copy(characters = it.characters + newCharacters)
             }
         }
     }
