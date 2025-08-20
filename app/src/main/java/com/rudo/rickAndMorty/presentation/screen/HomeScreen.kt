@@ -11,12 +11,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -30,6 +33,11 @@ import androidx.compose.ui.unit.sp
 import com.rudo.rickAndMorty.domain.entity.Character
 import coil.compose.AsyncImage
 import com.rudo.rickAndMorty.R
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 
 /**
  * MainScreen composable.
@@ -39,23 +47,56 @@ import com.rudo.rickAndMorty.R
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = HomeViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    Scaffold(
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 
+    Scaffold(
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    val collapse = scrollBehavior.state.collapsedFraction
+                    val alpha = 1f - collapse
+                    Text(
+                        text = "Rick & Morty",
+                        modifier = Modifier.alpha(alpha),
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(R.font.robotobold))
+                    )
+                },
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Black,
+                    scrolledContainerColor = Color.Black,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White,
+                    actionIconContentColor = Color.White
+                )
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .background(Color.Black)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
-            item {
-                CharacterSearchBar(
-                    query = uiState.query,
-                    onQueryChange = { viewModel.getCharactersByName(it) }
-                )
+            stickyHeader {
+                Surface(
+                    shadowElevation = 1.dp,
+                    color = Color.Black
+                ) {
+                    CharacterSearchBar(
+                        query = uiState.query,
+                        onQueryChange = { viewModel.getCharactersByName(it) }
+                    )
+                }
             }
 
             items(uiState.characters) { character ->
                 CharacterItem(character)
+                if (uiState.characters[uiState.characters.size - 4] == character) {
+                    viewModel.loadMoreCharacters()
+                }
             }
         }
     }
