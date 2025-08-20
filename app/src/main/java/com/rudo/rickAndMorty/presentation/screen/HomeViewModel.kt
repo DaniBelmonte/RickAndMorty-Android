@@ -8,14 +8,16 @@ import com.rudo.rickAndMorty.data.repository.RickAndMortyRepositoryImpl
 import com.rudo.rickAndMorty.domain.entity.Character
 import com.rudo.rickAndMorty.domain.useCase.RickAndMortyUseCase
 import com.rudo.rickAndMorty.domain.useCase.RickAndMortyUseCaseImpl
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
+import retrofit2.http.Query
 
 data class HomeUIState(
-    val characters: List<Character> = emptyList()
+    val characters: List<Character> = emptyList(),
+    var query: String = ""
 )
 class HomeViewModel: ViewModel() {
 
@@ -24,6 +26,7 @@ class HomeViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(HomeUIState())
     val uiState = _uiState.asStateFlow()
 
+    var searchJob: Job? = null
     init {
         val dataSource = RickAndMortyDataSourceImpl()
         val repository = RickAndMortyRepositoryImpl(dataSource)
@@ -35,6 +38,32 @@ class HomeViewModel: ViewModel() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(characters = useCase.getCharacters(1))
+            }
+        }
+    }
+
+    fun getCharactersByName(name: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            try {
+                _uiState.update {
+                    it.copy(
+                        query = name
+                    )
+                }
+                _uiState.update {
+                    it.copy(
+                        characters = useCase.searchCharacters(name),
+                    )
+                }
+            } catch (
+                e: Exception
+            ) {
+                _uiState.update {
+                    it.copy(
+                        characters = emptyList()
+                    )
+                }
             }
         }
     }

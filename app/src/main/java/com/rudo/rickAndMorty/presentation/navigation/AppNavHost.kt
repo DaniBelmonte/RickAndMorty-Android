@@ -1,4 +1,4 @@
-package com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.navigation
+package com.rudo.rickAndMorty.presentation.navigation
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.screen.HomeScreen
+import com.rudo.rickAndMorty.presentation.screen.HomeScreen
 
 /**
  * AppNavHost handles the main navigation flow of the application.

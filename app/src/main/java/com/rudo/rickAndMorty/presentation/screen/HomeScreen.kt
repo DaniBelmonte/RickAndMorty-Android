@@ -1,4 +1,4 @@
-package com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.screen
+package com.rudo.rickAndMorty.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -6,30 +6,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.rudo.rickAndMorty.domain.entity.Character
-import com.rudo.rickAndMorty.presentation.screen.HomeViewModel
 import coil.compose.AsyncImage
 import com.rudo.rickAndMorty.R
 
@@ -42,21 +40,59 @@ import com.rudo.rickAndMorty.R
 fun HomeScreen(viewModel: HomeViewModel = HomeViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("My Application") }
-            )
-        }
+
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .background(Color.Black)
         ) {
+            item {
+                CharacterSearchBar(
+                    query = uiState.query,
+                    onQueryChange = { viewModel.getCharactersByName(it) }
+                )
+            }
+
             items(uiState.characters) { character ->
                 CharacterItem(character)
             }
         }
+    }
+}
+
+@Composable
+fun CharacterSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        OutlinedTextField(
+            value = query,
+            onValueChange = onQueryChange,
+            placeholder = { Text("Search characters") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search Icon"
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
+        )
     }
 }
 

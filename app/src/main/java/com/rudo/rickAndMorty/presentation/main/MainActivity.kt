@@ -7,8 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.navigation.AppNavHost
-import com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.ui.theme.MiAppTheme
+import com.rudo.rickAndMorty.presentation.navigation.AppNavHost
+import com.rudo.rickAndMorty.presentation.ui.theme.MiAppTheme
 
 /**
  * Main entry point of the application.

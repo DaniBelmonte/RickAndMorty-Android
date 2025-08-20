@@ -1,9 +1,6 @@
 package com.rudo.rickAndMorty.data.dataSource.dto
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class CharacterDto(
+data class CharacterDetailDto(
     val id: Int,
     val name: String,
     val status: String,

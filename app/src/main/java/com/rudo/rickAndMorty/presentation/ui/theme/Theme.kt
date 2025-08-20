@@ -1,4 +1,4 @@
-package com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.ui.theme
+package com.rudo.rickAndMorty.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*

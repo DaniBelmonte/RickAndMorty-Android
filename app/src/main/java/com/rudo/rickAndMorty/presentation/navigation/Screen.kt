@@ -1,4 +1,4 @@
-package com.rudo.rickcom.rudo.rickes.rudo.archetypeandroidmortymorty.presentation.navigation
+package com.rudo.rickAndMorty.presentation.navigation
 
 import kotlinx.serialization.Serializable
 

@@ -38,7 +38,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             //Configure Android Application
             extensions.configure<ApplicationExtension> {
                 defaultConfig {
-                    applicationId = "com.rudo.rickes.rudo.archetypeandroidmorty"
+                    applicationId = "com.rudo.rickAndMorty"
                     targetSdk = 35
                     versionCode = 1
                     versionName = "1.0.0"
