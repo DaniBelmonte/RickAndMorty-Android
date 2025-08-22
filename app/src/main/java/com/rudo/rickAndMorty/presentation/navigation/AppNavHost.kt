@@ -8,7 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.rudo.rickAndMorty.presentation.screen.HomeScreen
+import com.rudo.rickAndMorty.presentation.screen.characterDetail.CharacterDetailScreen
+import com.rudo.rickAndMorty.presentation.screen.home.HomeScreen
 
 /**
  * AppNavHost handles the main navigation flow of the application.
@@ -26,7 +27,7 @@ import com.rudo.rickAndMorty.presentation.screen.HomeScreen
 
 @Composable
 fun AppNavHost(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     NavHost(
         navController = navController,
@@ -70,7 +71,16 @@ fun AppNavHost(
     ) {
 
         composable<Screen.MainScreen> {
-            HomeScreen()
+            HomeScreen(
+                navigateToDetail = { id ->
+                    navController
+                        .navigate(Screen.DetailScreen(id))
+                }
+            )
+        }
+
+        composable<Screen.DetailScreen> {
+            CharacterDetailScreen()
         }
     }
 }
