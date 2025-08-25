@@ -80,7 +80,9 @@ fun AppNavHost(
         }
 
         composable<Screen.DetailScreen> {
-            CharacterDetailScreen()
+            CharacterDetailScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
