@@ -1,17 +1,8 @@
 package com.rudo.rickAndMorty
 
 import android.app.Application
+import com.rudo.rickAndMorty.data.dataSource.local.FavoriteRoomDatabase
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class App : Application() {
-
-    companion object {
-        lateinit var instance: App private set
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-    }
-}
+class App : Application()

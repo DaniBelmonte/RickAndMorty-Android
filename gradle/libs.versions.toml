@@ -6,6 +6,7 @@ gson = "2.13.1"
 kotlin = "2.2.0"
 loggingInterceptorVersion = "4.12.0"
 retrofitVersion = "2.3.0"
+roomRuntime = "2.7.2"
 serialization = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -29,6 +30,7 @@ mockk = "1.14.4"
 kotlin-test-junit = "2.2.0"
 kotlinx-coroutines-test = "1.10.2"
 roomCommon = "2.7.2"
+roomKtx = "2.7.2"
 hilt = "2.56.2"
 hilt-android-compiler = "2.56.2"
 hilt-navigation-compose = "1.2.0"
@@ -44,6 +46,9 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-lifecycle-viewmodel-ktx-v270 = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle-viewmodel-ktx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+room-androidx-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }

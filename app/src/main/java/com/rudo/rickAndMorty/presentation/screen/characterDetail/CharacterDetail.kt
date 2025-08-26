@@ -74,13 +74,17 @@ fun CharacterDetailScreen(
         containerColor = darkBg
     ) {
         uiState.character?.let {
-            CharacterDetailContent(it)
+            CharacterDetailContent(viewModel::toggleFavorite, uiState.isFavorite, detail = it)
         }
     }
 }
 
 @Composable
-private fun CharacterDetailContent(detail: CharacterDetail) {
+private fun CharacterDetailContent(
+    toggleFavorite: () -> Unit,
+    isFavorite: Boolean,
+    detail: CharacterDetail
+) {
     val darkBg = Color(0xFF2B2B2B)
     LazyColumn(
         modifier = Modifier
@@ -103,9 +107,10 @@ private fun CharacterDetailContent(detail: CharacterDetail) {
                     contentScale = ContentScale.Crop
                 )
 
-                var fav by remember { mutableStateOf(false) }
                 IconButton(
-                    onClick = { fav = !fav },
+                    onClick = {
+                        toggleFavorite()
+                    },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .offset(y = 12.dp)
@@ -115,7 +120,7 @@ private fun CharacterDetailContent(detail: CharacterDetail) {
                         .background(Color(0xFF66BB6A))
                 ) {
                     Icon(
-                        imageVector = if (fav) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite",
                         tint = Color.Black
                     )

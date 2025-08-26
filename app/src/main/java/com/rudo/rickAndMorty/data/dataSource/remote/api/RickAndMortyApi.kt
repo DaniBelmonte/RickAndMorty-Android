@@ -1,7 +1,7 @@
-package com.rudo.rickAndMorty.data.dataSource.api
+package com.rudo.rickAndMorty.data.dataSource.remote.api
 
-import com.rudo.rickAndMorty.data.dataSource.dto.CharacterDetailDto
-import com.rudo.rickAndMorty.data.dataSource.dto.CharactersResponseDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharacterDetailDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharactersResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

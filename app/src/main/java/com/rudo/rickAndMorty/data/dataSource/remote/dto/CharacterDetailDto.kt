@@ -1,4 +1,4 @@
-package com.rudo.rickAndMorty.data.dataSource.dto
+package com.rudo.rickAndMorty.data.dataSource.remote.dto
 
 data class CharacterDetailDto(
     val id: Int,

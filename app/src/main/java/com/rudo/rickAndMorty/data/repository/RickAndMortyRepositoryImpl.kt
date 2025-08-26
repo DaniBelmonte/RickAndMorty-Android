@@ -1,10 +1,10 @@
 package com.rudo.rickAndMorty.data.repository
 
-import com.rudo.rickAndMorty.data.dataSource.RickAndMortyDataSource
-import com.rudo.rickAndMorty.data.dataSource.dto.CharacterDetailDto
-import com.rudo.rickAndMorty.data.dataSource.dto.CharacterDto
-import com.rudo.rickAndMorty.data.dataSource.dto.LocationDto
-import com.rudo.rickAndMorty.data.dataSource.dto.OriginDto
+import com.rudo.rickAndMorty.data.dataSource.remote.RickAndMortyDataSource
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharacterDetailDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharacterDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.LocationDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.OriginDto
 import com.rudo.rickAndMorty.domain.RickAndMortyRepository
 import com.rudo.rickAndMorty.domain.entity.Character
 import com.rudo.rickAndMorty.domain.entity.CharacterDetail

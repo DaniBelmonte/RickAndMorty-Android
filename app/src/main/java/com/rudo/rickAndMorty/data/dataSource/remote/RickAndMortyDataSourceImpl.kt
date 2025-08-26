@@ -1,9 +1,9 @@
-package com.rudo.rickAndMorty.data.dataSource
+package com.rudo.rickAndMorty.data.dataSource.remote
 
-import com.rudo.rickAndMorty.data.dataSource.api.RickAndMortyApi
-import com.rudo.rickAndMorty.data.dataSource.dto.CharacterDetailDto
-import com.rudo.rickAndMorty.data.dataSource.dto.CharacterDto
-import com.rudo.rickAndMorty.data.dataSource.dto.CharactersResponseDto
+import com.rudo.rickAndMorty.data.dataSource.remote.api.RickAndMortyApi
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharacterDetailDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharacterDto
+import com.rudo.rickAndMorty.data.dataSource.remote.dto.CharactersResponseDto
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

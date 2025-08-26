@@ -12,8 +12,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.room.runtime)
     implementation(libs.retrofit.v230)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor.v4120)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.room.androidx.compiler)
 }
