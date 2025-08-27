@@ -11,4 +11,5 @@ data class Character(
     val location: Location,
     val episode: List<String>,
     val image: String,
+    var isFavorite: Boolean
 ) {}

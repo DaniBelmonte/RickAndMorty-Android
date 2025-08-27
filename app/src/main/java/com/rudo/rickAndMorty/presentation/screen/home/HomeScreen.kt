@@ -2,18 +2,23 @@ package com.rudo.rickAndMorty.presentation.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,6 +39,7 @@ import com.rudo.rickAndMorty.R
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -95,7 +101,7 @@ fun HomeScreen(
             }
 
             items(uiState.characters) { character ->
-                CharacterItem(character, navigateToDetail)
+                CharacterItem(character, navigateToDetail, )
                 if (uiState.characters[uiState.characters.size - 4] == character) {
                     viewModel.loadMoreCharacters()
                 }
@@ -147,13 +153,16 @@ fun CharacterItem(character: Character, navigateToDetail: (Int) -> Unit) {
             .clickable{
                 navigateToDetail(character.id)
             },
+
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
                 .padding(8.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
                 model = character.image,
@@ -162,7 +171,7 @@ fun CharacterItem(character: Character, navigateToDetail: (Int) -> Unit) {
                     .size(50.dp)
                     .clip(RoundedCornerShape(4.dp))
             )
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = character.name,
                     color = Color(0xFF2B3B62),
@@ -194,6 +203,12 @@ fun CharacterItem(character: Character, navigateToDetail: (Int) -> Unit) {
                     )
                 }
             }
+            Icon(
+                imageVector = if (character.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                contentDescription = "Favorite",
+                tint = Color.Black,
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 }

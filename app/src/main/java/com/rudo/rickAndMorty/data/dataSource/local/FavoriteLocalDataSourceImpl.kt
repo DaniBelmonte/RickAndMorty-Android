@@ -12,6 +12,10 @@ class FavoriteLocalDataSourceImpl @Inject constructor(
 
     private val dao = dataBase.favoriteDao()
 
+    override suspend fun getAllFavoriteIds(): Flow<List<Int>> {
+        return dao.getAllFavoriteIds()
+    }
+
     override suspend fun isFavorite(id: Int): Flow<Boolean> {
         return  dao.isFavoriteFlow(id)
     }

@@ -38,7 +38,9 @@ class RickAndMortyRepositoryImpl @Inject constructor( val dataSource: RickAndMor
             origin = this.origin.toDomain(),
             location = this.location.toDomain(),
             episode = this.episode,
-            image = this.image)
+            image = this.image,
+            isFavorite = false
+        )
     }
 
     fun CharacterDetailDto.toDomain(): CharacterDetail {

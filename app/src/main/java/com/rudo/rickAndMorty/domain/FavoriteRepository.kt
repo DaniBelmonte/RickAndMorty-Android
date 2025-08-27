@@ -4,6 +4,8 @@ package com.rudo.rickAndMorty.domain
 import kotlinx.coroutines.flow.Flow
 
 interface FavoritesRepository {
+
+    suspend fun getAllFavoriteIds(): Flow<List<Int>>
     suspend fun isFavorite(id: Int): Flow<Boolean>
     suspend fun add(id: Int)
     suspend fun remove(id: Int)
