@@ -34,6 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.rudo.rickAndMorty.R
 import com.rudo.rickAndMorty.domain.entity.CharacterDetail
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.Arrangement
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,6 +45,8 @@ fun CharacterDetailScreen(
     onBack: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     val darkBg = Color(0xFF2B2B2B)
     Scaffold(
@@ -71,18 +75,60 @@ fun CharacterDetailScreen(
                 )
             )
         },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.fillMaxWidth()
+            ) { data ->
+                Snackbar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(78.dp)
+                        .padding(horizontal = 16.dp),
+                    containerColor = Color(0xFFFFF59D),
+                    contentColor = Color.Black
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = data.visuals.message,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.Black
+                        )
+                        TextButton(onClick = { data.dismiss() }) {
+                            Text("✕", color = Color.Black)
+                        }
+                    }
+                }
+            }
+        },
         containerColor = darkBg
     ) {
         uiState.character?.let {
-            CharacterDetailContent(viewModel::toggleFavorite, uiState.isFavorite, detail = it)
+            CharacterDetailContent(
+                isFavorite = uiState.isFavorite,
+                onToggle = { wasFavorite ->
+                    scope.launch {
+                        if (wasFavorite) {
+                            snackbarHostState.showSnackbar(message = "The character has been removed from favourites.")
+                        }
+                    }
+                    viewModel.toggleFavorite()
+                },
+                detail = it
+            )
         }
     }
 }
 
 @Composable
 private fun CharacterDetailContent(
-    toggleFavorite: () -> Unit,
     isFavorite: Boolean,
+    onToggle: (Boolean) -> Unit,
     detail: CharacterDetail
 ) {
     val darkBg = Color(0xFF2B2B2B)
@@ -94,7 +140,6 @@ private fun CharacterDetailContent(
     ) {
         item { Spacer(Modifier.height(12.dp)) }
 
-        // Header image + floating favorite
         item {
             Box(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
@@ -108,9 +153,7 @@ private fun CharacterDetailContent(
                 )
 
                 IconButton(
-                    onClick = {
-                        toggleFavorite()
-                    },
+                    onClick = { onToggle(isFavorite) },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .offset(y = 12.dp)
@@ -143,74 +186,85 @@ private fun CharacterDetailContent(
 
         item { Spacer(Modifier.height(12.dp)) }
 
-        // Specie / Type
-        item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                LabeledValue(label = "Specie:", value = detail.species.ifEmpty { "Unknow" })
-                LabeledValue(label = "Type:", value = detail.type.ifEmpty { "-" })
-            }
-        }
-        item { Spacer(Modifier.height(8.dp)) }
-
-        // From / Status
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.Top
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "From:", color = Color(0xFFBDBDBD))
-                    Spacer(Modifier.width(6.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    LabeledValue(label = "Specie:", value = detail.species.ifEmpty { "Unknow" })
+                    Spacer(Modifier.height(8.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "From:", color = Color(0xFFBDBDBD))
+                        Spacer(Modifier.width(6.dp))
                         Text(
                             text = detail.origin.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
                             color = Color(0xFFBBDEFB),
-                            modifier = Modifier.clickable {
-
-                            },
-                            textDecoration = TextDecoration.Underline
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier.weight(1f).clickable { /* TODO: navigate origin */ },
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
+                    }
+                    Spacer(Modifier.height(8.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "First time seen:", color = Color(0xFFBDBDBD))
                         Spacer(Modifier.width(6.dp))
+                        Text(
+                            text = detail.origin.name,
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.White,
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "Last time seen:", color = Color(0xFFBDBDBD))
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            text = detail.location.name.ifEmpty { "Unknow" },
+                            overflow = TextOverflow.Ellipsis,
+                            color = Color.White,
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                 }
 
-                val statusColor = when (detail.status) {
-                    "Alive" -> Color(0xFF66BB6A)
-                    "Dead" -> Color(0xFFE57373)
-                    else -> Color(0xFFBDBDBD)
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Status:", color = Color(0xFFBDBDBD))
-                    Spacer(Modifier.width(6.dp))
-                    Text(text = detail.status, color = statusColor)
+                Spacer(Modifier.width(12.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    LabeledValue(label = "Type:", value = detail.type.ifEmpty { "-" })
+                    Spacer(Modifier.height(8.dp))
+
+                    val statusColor = when (detail.status) {
+                        "Alive" -> Color(0xFF66BB6A)
+                        "Dead" -> Color(0xFFE57373)
+                        else -> Color(0xFFBDBDBD)
+                    }
+                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Status:",
+                            color = Color(0xFFBDBDBD)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            text = detail.status,
+                            overflow = TextOverflow.Ellipsis,
+                            color = statusColor,
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
             }
         }
-
         item { Spacer(Modifier.height(12.dp)) }
-
-        // First time seen
-        item {
-            Row {
-                Text(text = "First time seen:", color = Color(0xFFBDBDBD))
-                Spacer(Modifier.width(6.dp))
-                Text(text = "Unknow", color = Color.White)
-            }
-        }
-
-        item { Spacer(Modifier.height(8.dp)) }
-
-        // Last time seen
-        item {
-            Row {
-                Text(text = "Last time seen:", color = Color(0xFFBDBDBD))
-                Spacer(Modifier.width(6.dp))
-                Text(text = detail.location.name.ifEmpty { "Unknow" }, color = Color.White)
-            }
-        }
-
-        item { Spacer(Modifier.height(20.dp)) }
 
         item {
             Text(
@@ -219,12 +273,12 @@ private fun CharacterDetailContent(
                 fontWeight = FontWeight.SemiBold
             )
         }
-        item { Spacer(Modifier.height(8.dp)) }
 
+        item { Spacer(Modifier.height(8.dp)) }
 
         items(detail.episode) { url ->
             val id = url.substringAfterLast("/").toIntOrNull() ?: 0
-            val label = "S01E" + id.toString().padStart(2, '0')
+            val label = "S01E$id"
             Text(
                 text = "$label - $url",
                 color = Color(0xFFFFEB3B),
@@ -234,7 +288,9 @@ private fun CharacterDetailContent(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .padding(bottom = 16.dp)
-                    .clickable { /* TODO: navigate to episode */ }
+                    .clickable {
+
+                    }
 
             )
         }
@@ -245,9 +301,18 @@ private fun CharacterDetailContent(
 
 @Composable
 private fun LabeledValue(label: String, value: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(text = label, color = Color(0xFFBDBDBD))
         Spacer(Modifier.width(6.dp))
-        Text(text = value, color = Color.White)
+        Text(
+            text = value,
+            color = Color.White,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
     }
 }

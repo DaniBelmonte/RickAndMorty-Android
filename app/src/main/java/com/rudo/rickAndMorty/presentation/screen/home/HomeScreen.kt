@@ -90,7 +90,6 @@ fun HomeScreen(
         ) {
             stickyHeader {
                 Surface(
-                    shadowElevation = 1.dp,
                     color = Color.Black
                 ) {
                     CharacterSearchBar(
